@@ -1,0 +1,15 @@
+{
+    "name": "loop-cli",
+    "version": "0.1",
+    "main": "index.js",
+    "bin": {
+        "loop-cli": "./index.js"
+    },
+    "author": "Shane van Coller",
+    "license": "MIT",
+    "dependencies": {
+        "commander": "^9.4.1",
+        "dotenv": "^16.0.3",
+        "ethers": "^5.7.2"
+    }
+}
