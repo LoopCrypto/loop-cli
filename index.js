@@ -5,7 +5,7 @@ const { sign, signSend } = require("./lib");
 program
     .command("sign")
     .description("Sign Loop transfer requests")
-    .option("-d, --debug", "Print debug info?", false)
+    .option("-d, --debug", "Print debug info", false)
     .option(
         "-c, --config-file-path <value>",
         "Full path to the file containing config information"
@@ -24,18 +24,22 @@ program
 program
     .command("signAndSend")
     .description("Sign and send Loop transfer requests to Loop API endpoint")
-    .option("-d, --debug", "Print debug info?", false)
+    .option("-d, --debug", "Print debug info", false)
     .option(
         "-c, --config-file-path <value>",
         "Full path to the file containing config information"
     )
     .option(
         "--entity-id <value>",
-        "Loop Entity ID that the item being billed is linked to"
+        "[Optional] Loop Entity ID that the item being billed is linked to. If not provided, the entity id in the config will be used"
     )
     .option(
         "--item-id <value>",
         "Loop Item ID that is associated with the transfer"
+    )
+    .option(
+        "--bill-date <value>",
+        "The date the transfer should be executed on, formatted as a UNIX timestamp"
     )
     .option("--invoice-id <value>", "Invoice ID related to the transfer")
     .option("--from-address <value>", "Wallet address funds are pulled from")
