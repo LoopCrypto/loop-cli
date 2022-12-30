@@ -10,14 +10,12 @@ npm install -g @loop-crypto/loop-cli
 
 If you get an access denied error, try running `npm install` with elevated permissions:
 
--   Mac/Linux`sudo npm install -g @loop-crypto/loop-cli`
+-   Mac/Linux: `sudo npm install -g @loop-crypto/loop-cli`
 -   Windows: Right-click Command prompt, click `Run as administrator` and then run `npm install -g @loop-crypto/loop-cli` again
 
 <br />
 
 ## Setup
-
----
 
 Create a configuration file in a convenient directory, the file can be named anything but must have `.txt` extension. For example,
 
@@ -53,8 +51,6 @@ API_ENTITY_ID=a49f6aeb-886b-11ed-9b88-0242ac120002
 <br />
 
 ## Usage
-
----
 
 <br />
 
@@ -144,10 +140,6 @@ The output of the `sign` command is the signature that is needed as a parameter 
 ```
 📝  Generated Signature:  0x00000e022a4a9d04f9c186b98a2787de48f3f53ed80da4f8a03d836e4bf7d1d745d70cddcf2fe25562e51c959720a5bf0662afae57e6c55a0196694e4130e00000
 ```
-
-<br />
-
----
 
 <br />
 
@@ -272,8 +264,6 @@ Sending signature to Loop...
 <br />
 
 ## Configuration
-
----
 
 <br />
 
