@@ -8,6 +8,13 @@
 npm install -g @loop-crypto/loop-cli
 ```
 
+If you get an access denied error, try running `npm install` with elevated permissions:
+
+-   Mac/Linux`sudo npm install -g @loop-crypto/loop-cli`
+-   Windows: Right-click Command prompt, click `Run as administrator` and then run `npm install -g @loop-crypto/loop-cli` again
+
+<br />
+
 ## Setup
 
 ---
@@ -28,7 +35,7 @@ The contents of the file should contain the following key=value pairs:
 | NETWORK_ID         | The network ID that the contract is deployed to. See `Chain ID's` in the `Configuration` section below to determine which network ID to use |
 | APP_API_URL        | The URL of the Loop API. See `Loop API` in the `Configuration` section below for the URL to use on a specific environment                   |
 | APP_API_KEY        | The API key to use to make the API call. This will be sent to you during onboarding                                                         |
-| API_ENTITY_ID      | The entity ID assigned to you. This is will sent to you during onboarding, or is available on the company portal on the `Developer` page    |
+| API_ENTITY_ID      | The entity ID assigned to you. This will be sent to you during onboarding, or is available on the company portal on the `Developer` page.   |
 
 For example:
 
@@ -53,6 +60,8 @@ API_ENTITY_ID=a49f6aeb-886b-11ed-9b88-0242ac120002
 
 ### The `sign` command
 
+<br />
+
 In order to send a valid transfer request to Loop, the request must contain a signature field. This `sign` CLI command will generate this signature for you by using a combination of the configuration parameters set in the config file, and the fields describing the details of the individual transfer.
 
 The message being signed is made of 6 fields which represent the details of the transfer itself:
@@ -74,7 +83,7 @@ Options:
   --to-address <value>            Wallet address funds are going to
   --token-address <value>         Address of the token used as payment
   --amount <value>                Amount to bill. If '--usd' flag is present, specify the amount in USD cents (e.g. 2999 for $29.99). If '--usd' flag is not present, specify the native token amount (e.g. 1000000 for 1 USDC).
-  --usd                           [Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' (default: false)
+  --usd                           [Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' when you want 'true'. If it is not included, it defaults to 'false'
   -d, --debug                     [Optional] Print debug info (default: false)
   -h, --help                      display help for command
 ```
@@ -144,13 +153,20 @@ The output of the `sign` command is the signature that is needed as a parameter 
 
 ### The `signAndSend` command
 
+<br />
+
 This command combines the above signature step with actually submitting the transfer request to Loop. There are additional fields that need to be passed to this command that are required to successfully send a transfer request.
 
-A valid `itemId` is required to send a successful transfer request. The item ID represents the item that the invoice is related to. Initial item ID's will be sent to you during onboarding but will also be available on the company portal
+Validations:
 
-The `entityId` is only required if the entity ID that appears on the transfer request is different from the entity ID in the config file. A scenario where they would be different is when the parent company was submitting a transfer request on behalf of its children. If the entity ID's are the same however, then the field can be omitted from the set of parameters
+-   The signature must be signed by the wallet address that is saved in the contract
+-   The `invoice-id`, `from-address`, `to-address`, `token-address`, `amount` and `usd` combination must be unique
+-   The `bill-date`, if specified, must be a valid [UNIX timestamp](https://en.wikipedia.org/wiki/Unix_time) in seconds. If omitted, it defaults to `0` which indicates that the transfer will be executed immediately<sup>\*</sup>
+-   The `token-address` must match the token the `from-address` gave the authorization for originally
+-   The `item-id` must be a valid item linked to your entity ID. Initial item ID's will be sent to you during onboarding but will also be available on the company portal
+-   The `entity-id`, if specified, must be a valid _child_ entity ID of the entity ID specified in the config file
 
-The `billDate` is an optional field representing the date on which you want the transfer to execute, represented as [UNIX time](https://en.wikipedia.org/wiki/Unix_time) in seconds. Passing a value of `0` (or omitting the field entirely) indicates that the invoice should be executed immediately<sup>\*</sup>. All dates, other than `0`, should be passed as future dates. [This](https://www.epochconverter.com/) is a useful tool to help convert dates into seconds
+If any of the validations fail, the transfer request will not send and return the relevant error message explaining why it failed
 
 **NOTE**: There is a prompt you have to confirm before the request actually gets sent
 
@@ -165,9 +181,9 @@ Options:
   --token-address <value>         Address of the token used as payment
   --amount <value>                Amount to bill. If '--usd' flag is present, specify the amount in USD cents (e.g. 2999 for $29.99). If '--usd' flag is not present, specify the native token amount (e.g. 1000000 for 1 USDC).
   --item-id <value>               Loop Item ID that is associated with the transfer
-  --entity-id <value>             [Optional] Loop Entity ID that the item being billed is linked to
+  --entity-id <value>             [Optional] The child entity ID that the item being billed is linked to. If omitted, the transfer will be linked to the entity ID in the config file
   --bill-date <value>             [Optional] The date the transfer should be executed on, formatted as a UNIX timestamp in seconds. 0 value indicates immediate processing (default: 0)
-  --usd                           [Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' (default: false)
+  --usd                           [Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' when you want 'true'. If it is not included, it defaults to 'false'
   -d, --debug                     [Optional] Print debug info (default: false)
   -h, --help                      display help for command
 

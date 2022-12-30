@@ -58,7 +58,7 @@ program
     )
     .option(
         "--entity-id <value>",
-        "[Optional] Loop Entity ID that the item being billed is linked to. If not provided here, the entity id in the config file will be used"
+        "[Optional] The child entity ID that the item being billed is linked to. If omitted, the transfer will be linked to the entity ID in the config file"
     )
     .option(
         "--bill-date <value>",
@@ -66,7 +66,7 @@ program
     )
     .option(
         "--usd",
-        "[Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' (default: false)",
+        "[Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' when you want 'true'. If it is not included, it defaults to 'false'",
         false
     )
     .option("-d, --debug", "[Optional] Print debug info", false)
