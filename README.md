@@ -2,8 +2,6 @@
 
 ## Install
 
----
-
 ```
 npm install -g @loop-crypto/loop-cli
 ```
@@ -142,6 +140,8 @@ The output of the `sign` command is the signature that is needed as a parameter 
 ```
 
 <br />
+
+---
 
 ### The `signAndSend` command
 
