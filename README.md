@@ -24,14 +24,14 @@ The name and location of this file is important as it will be passed as a parame
 
 The contents of the file should contain the following key=value pairs:
 
-| Key                | Description                                                                                                                                 |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| SIGNER_PRIVATE_KEY | The private key of the wallet address that is configured as the `signer` wallet in the contract                                             |
-| CONTRACT_ADDRESS   | The address of the contract the transfer request will be sent to                                                                            |
-| NETWORK_ID         | The network ID that the contract is deployed to. See `Chain ID's` in the `Configuration` section below to determine which network ID to use |
-| APP_API_URL        | The URL of the Loop API. See `Loop API` in the `Configuration` section below for the URL to use on a specific environment                   |
-| APP_API_KEY        | The API key to use to make the API call. This will be sent to you during onboarding                                                         |
-| API_ENTITY_ID      | The entity ID assigned to you. This will be sent to you during onboarding, or is available on the company portal on the `Developer` page.   |
+| Key                | Description                                                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SIGNER_PRIVATE_KEY | The private key of the wallet address that is configured as the `signer` wallet in the contract                                                                          |
+| CONTRACT_ADDRESS   | The address of the contract the transfer request will be sent to                                                                                                         |
+| NETWORK_ID         | The network ID that the contract is deployed to. See `Chain ID's` in the `Configuration` section below to determine which network ID to use                              |
+| APP_API_URL        | The URL of the Loop API. See `Loop API` in the `Configuration` section below for the URL to use on a specific environment                                                |
+| APP_API_KEY        | The API key to use to make the API call. This will be sent to you during onboarding                                                                                      |
+| API_ENTITY_ID      | The entity ID assigned to you that is linked to your API key. This will be sent to you during onboarding, or is available on the company portal on the `Developer` page. |
 
 For example:
 
@@ -58,13 +58,13 @@ API_ENTITY_ID=a49f6aeb-886b-11ed-9b88-0242ac120002
 
 In order to send a valid transfer request to Loop, the request must contain a signature field. This `sign` CLI command will generate this signature for you by using a combination of the configuration parameters set in the config file, and the fields describing the details of the individual transfer.
 
-The message being signed is made of 6 fields which represent the details of the transfer itself:
+The message being signed is made up of 6 fields which represent the details of the transfer itself:
 
 1. `invoiceId` - Invoice ID for the payment. Invoiced ID's should be unique per payment
 1. `from` - The wallet address the funds are coming from
 1. `to` - The wallet address the funds are going to
 1. `token` - The address of the token used as payment
-1. `amount` - The invoice amount. Can either be specified in USD cents, or the native token. For example, if the invoice amount is \$29.99, the `amount` field would be `2999`. See more examples below
+1. `amount` - The invoice amount. Can either be specified in USD cents, or the native token amount of the token specified in the request. For example, if the invoice amount is \$29.99, the `amount` field would be `2999`. See more examples below
 1. `usd` - A true/false flag indicating whether the `amount` was specified in USD.
 
 As a result, each of the 6 fields above need to be specified as input to the `sign` command in order to generate a valid signature. The complete list of available parameter is as follows:
@@ -152,7 +152,7 @@ This command combines the above signature step with actually submitting the tran
 Validations:
 
 -   The signature must be signed by the wallet address that is saved in the contract
--   The `invoice-id`, `from-address`, `to-address`, `token-address`, `amount` and `usd` combination must be unique
+-   The `invoice-id`, `from-address`, `to-address`, `token-address`, `amount` and `usd` combination must be unique from all previous transfer requests
 -   The `bill-date`, if specified, must be a valid [UNIX timestamp](https://en.wikipedia.org/wiki/Unix_time) in seconds. If omitted, it defaults to `0` which indicates that the transfer will be executed immediately<sup>\*</sup>
 -   The `token-address` must match the token the `from-address` gave the authorization for originally
 -   The `item-id` must be a valid item linked to your entity ID. Initial item ID's will be sent to you during onboarding but will also be available on the company portal
