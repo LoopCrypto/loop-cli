@@ -5,51 +5,71 @@ const { sign, signSend } = require("./lib");
 program
     .command("sign")
     .description("Sign Loop transfer requests")
-    .option("-d, --debug", "Print debug info", false)
-    .option(
+    .requiredOption(
         "-c, --config-file-path <value>",
-        "Full path to the file containing config information"
+        "Full path to the file containing config information (eg. /Users/<USERNAME>/Desktop/config.txt)"
     )
-    .option("--invoice-id <value>", "Invoice ID related to the transfer")
-    .option("--from-address <value>", "Wallet address funds are pulled from")
-    .option("--to-address <value>", "Wallet address funds are going to")
-    .option("--token-address <value>", "Address of the token used to pay")
-    .option(
+    .requiredOption("--invoice-id <value>", "Invoice ID for the transfer")
+    .requiredOption(
+        "--from-address <value>",
+        "Wallet address funds are pulled from"
+    )
+    .requiredOption("--to-address <value>", "Wallet address funds are going to")
+    .requiredOption(
+        "--token-address <value>",
+        "Address of the token used as payment"
+    )
+    .requiredOption(
         "--amount <value>",
-        "Amount to bill. If --usd=true, specify the amount in dollars (e.g. 29.99 for $29.99). If --usd=false, specify the native token amount (e.g. 1000000 for 1 USDC)."
+        "Amount to bill. If '--usd' flag is present, specify the amount in USD cents (e.g. 2999 for $29.99). If '--usd' flag is not present, specify the native token amount (e.g. 1000000 for 1 USDC)"
     )
-    .option("--usd", "Is the amount denominated in USD?", false)
+    .option(
+        "--usd",
+        "[Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' (default: false)",
+        false
+    )
+    .option("-d, --debug", "[Optional] Print debug info", false)
     .action(sign);
 
 program
     .command("signAndSend")
     .description("Sign and send Loop transfer requests to Loop API endpoint")
-    .option("-d, --debug", "Print debug info", false)
-    .option(
+    .requiredOption(
         "-c, --config-file-path <value>",
-        "Full path to the file containing config information"
+        "Full path to the file containing config information (eg. /Users/<USERNAME>/Desktop/config.txt)"
     )
-    .option(
-        "--entity-id <value>",
-        "[Optional] Loop Entity ID that the item being billed is linked to. If not provided, the entity id in the config will be used"
+    .requiredOption("--invoice-id <value>", "Invoice ID for the transfer")
+    .requiredOption(
+        "--from-address <value>",
+        "Wallet address funds are pulled from"
     )
-    .option(
+    .requiredOption("--to-address <value>", "Wallet address funds are going to")
+    .requiredOption(
+        "--token-address <value>",
+        "Address of the token used as payment"
+    )
+    .requiredOption(
+        "--amount <value>",
+        "Amount to bill. If '--usd' flag is present, specify the amount in USD cents (e.g. 2999 for $29.99). If '--usd' flag is not present, specify the native token amount (e.g. 1000000 for 1 USDC)"
+    )
+    .requiredOption(
         "--item-id <value>",
         "Loop Item ID that is associated with the transfer"
     )
     .option(
-        "--bill-date <value>",
-        "The date the transfer should be executed on, formatted as a UNIX timestamp"
+        "--entity-id <value>",
+        "[Optional] The child entity ID that the item being billed is linked to. If omitted, the transfer will be linked to the entity ID in the config file"
     )
-    .option("--invoice-id <value>", "Invoice ID related to the transfer")
-    .option("--from-address <value>", "Wallet address funds are pulled from")
-    .option("--to-address <value>", "Wallet address funds are going to")
-    .option("--token-address <value>", "Address of the token used to pay")
     .option(
-        "--amount <value>",
-        "Amount to bill. If --usd=true, specify the amount in dollars (e.g. 29.99 for $29.99). If --usd=false, specify the native token amount (e.g. 1000000 for 1 USDC)."
+        "--bill-date <value>",
+        "[Optional] The date the transfer should be executed on, formatted as a UNIX timestamp. 0 value indicates immediate processing (default: 0)"
     )
-    .option("--usd", "Is the amount denominated in USD?", false)
+    .option(
+        "--usd",
+        "[Optional] This option should only be included if the amount is denominated in USD cents. No value is passed with this option, just '--usd' when you want 'true'. If it is not included, it defaults to 'false'",
+        false
+    )
+    .option("-d, --debug", "[Optional] Print debug info", false)
     .action(signSend);
 
 program.parse(process.argv);
