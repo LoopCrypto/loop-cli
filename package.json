@@ -1,6 +1,6 @@
 {
     "name": "@loop-crypto/loop-cli",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "main": "index.js",
     "bin": {
         "loop-cli": "./index.js"
